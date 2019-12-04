@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
         }
     }
     /* ----- END: do the calculations ----- */
-    display();
+    // old debug code display();
     int result = calc();
     char result_arr[64];
     // old debug code printf("Result: %d \n",result);
