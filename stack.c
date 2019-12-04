@@ -16,7 +16,7 @@ int pop()
     else
     {
         int temp = top->data;
-        printf("The popped element is: %d \n", (top->data));
+        // old debug code printf("The popped element is: %d \n", (top->data));
         top = top->next;
         return temp;
     }

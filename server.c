@@ -99,27 +99,27 @@ int main(int argc, char *argv[])
     {
         if( strstr(token, "+") != NULL)
         {
-            printf("Operate found: %s",token);
+            // old debug code printf("Operate found: %s",token);
             push(43); // ascii for +
         }
         else if ( strstr(token, "-") != NULL)
         {
-            printf("Operate found: %s",token);
+            // old debug code printf("Operate found: %s",token);
             push(45); // ascii for -
         }
         else if ( strstr(token, "*") != NULL)
         {
-            printf("Operate found: %s",token);
+            // old debug code printf("Operate found: %s",token);
             push(42); // ascii for *
         }
         else if ( strstr(token, "/") != NULL)
         {
-            printf("Operate found: %s",token);
+            // old debug code printf("Operate found: %s",token);
             push(47); // ascii for /
         }
         else if ( strstr(token, "%") != NULL)
         {
-            printf("Operate found: %s",token);
+            // old debug code printf("Operate found: %s",token);
             push(37); // ascii for %
         }
         else
@@ -127,16 +127,19 @@ int main(int argc, char *argv[])
             push(atoi(token));
         }
         
-        printf(" %s\n", token);
+        // old debug code printf(" %s\n", token);
         token = strtok(NULL, " ");
     }
     /* ----- END: do the calculations ----- */
-    display();
+    // old debug code display();
     int result = calc();
-    printf("Result: %d \n",result);
+    char result_arr [64];
+    // old debug code printf("Result: %d \n",result);
+    sprintf(result_arr, "%d",result);
     // message to sent back to client
-    n = write(newsockfd,"Server: message received", 24);
-    n = write(newsockfd,"Server: Result",14);
+    n = write(newsockfd,"Server: ",8);
+    n = write(newsockfd,result_arr,64);
+
     if (n < 0)
         error("ERROR writing to socket");
     close(newsockfd);

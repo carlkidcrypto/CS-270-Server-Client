@@ -22,5 +22,5 @@ runs:
 # run the client on port 4501 and with a set hostname
 # ./filename hostname port
 runc:
-	./c cs-course36.cs.uidaho.edu 4501
+	./c Localhost 4501
 
