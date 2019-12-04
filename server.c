@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -14,46 +14,78 @@ void error(const char *msg)
     exit(1);
 }
 
+int calc(char items[], int size)
+{
+}
+
 int main(int argc, char *argv[])
 {
-     int sockfd, newsockfd, portno;
-     socklen_t clilen;
-     char buffer[256];
-     struct sockaddr_in serv_addr, cli_addr;
-     int n;
-     if (argc < 2) {
-         fprintf(stderr,"ERROR, no port provided\n");
-         exit(1);
-     }
-     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-     if (sockfd < 0) 
+    /* ----- BEGIN: stuff for postfix calc ----- */
+    char items[64];
+    int result = 0;
+    /* ----- END: stuff for postfix calc ----- */
+
+    int sockfd, newsockfd, portno;
+    socklen_t clilen;
+    char buffer[256];
+    struct sockaddr_in serv_addr, cli_addr;
+    int n;
+    if (argc < 2)
+    {
+        fprintf(stderr, "ERROR, no port provided\n");
+        exit(1);
+    }
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
         error("ERROR opening socket");
-     bzero((char *) &serv_addr, sizeof(serv_addr));
-     portno = atoi(argv[1]);
-     serv_addr.sin_family = AF_INET;
-     serv_addr.sin_addr.s_addr = INADDR_ANY;
-     serv_addr.sin_port = htons(portno);
-     if (bind(sockfd, (struct sockaddr *) &serv_addr,
-              sizeof(serv_addr)) < 0) 
-              error("ERROR on binding");
-     listen(sockfd,5);
-     clilen = sizeof(cli_addr);
-     newsockfd = accept(sockfd, 
-                 (struct sockaddr *) &cli_addr, 
-                 &clilen);
-     if (newsockfd < 0) 
-          error("ERROR on accept");
-     bzero(buffer,256);
-     n = read(newsockfd,buffer,255);
-     if (n < 0) error("ERROR reading from socket");
-     {
-        //code to be by the server
-        printf("Here is the message: %s\n",buffer);
-     }
-     // message to sent back to client
-     n = write(newsockfd,"Server: message received",18);
-     if (n < 0) error("ERROR writing to socket");
-     close(newsockfd);
-     close(sockfd);
-     return 0; 
+    bzero((char *)&serv_addr, sizeof(serv_addr));
+    portno = atoi(argv[1]);
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(portno);
+    if (bind(sockfd, (struct sockaddr *)&serv_addr,
+             sizeof(serv_addr)) < 0)
+        error("ERROR on binding");
+    listen(sockfd, 5);
+    clilen = sizeof(cli_addr);
+    newsockfd = accept(sockfd,
+                       (struct sockaddr *)&cli_addr,
+                       &clilen);
+    if (newsockfd < 0)
+        error("ERROR on accept");
+    bzero(buffer, 256);
+    n = read(newsockfd, buffer, 255);
+    if (n < 0)
+        error("ERROR reading from socket");
+    //stuff from client
+    printf("Client: %s\n", buffer);
+
+    /* ----- BEGIN: do the calculations ----- */
+    char *token;
+    int i_items = 0;
+    /* get the first token */
+    token = strtok(buffer, " ");
+
+    /* walk through other tokens */
+    while (token != NULL)
+    {
+        items[i_items] = token;
+        printf(" %s\n", token);
+        token = strtok(NULL, " ");
+    }
+
+    
+
+//int results = atoi(x);
+
+
+    /* ----- END: do the calculations ----- */
+
+    // message to sent back to client
+    n = write(newsockfd, "Server: message received", 24);
+    if (n < 0)
+        error("ERROR writing to socket");
+    close(newsockfd);
+    close(sockfd);
+    return 0;
 }

@@ -12,7 +12,15 @@ all:
 # make just the server
 server:
 	gcc server.c -o s
-#make just the client
+# make just the client
 client:
 	gcc client.c -o c
+# run the sever on port 4500
+# ./filename port
+runs:
+	./s 4500
+# run the client on port 4500 and with a set hostname
+# ./filename hostname port
+runc:
+	./c cs-course36.cs.uidaho.edu 4500
 
