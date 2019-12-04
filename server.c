@@ -1,3 +1,12 @@
+/* server.c
+** server implementation file
+** Name: Carlos Santos
+** 12/4/19
+** Instructor: Bruce Bolden
+** CS 270
+** Note: code used from http://www.linuxhowtos.org/C_C++/socket.htm with a few modifications.
+*/
+
 /* A simple server in the internet domain using TCP
    The port number is passed as an argument */
 #include <stdio.h>
@@ -17,40 +26,45 @@ void error(const char *msg)
 
 int calc()
 {
-    if(pop() == '+')
-        {
-            int x = pop();
-            int y = pop();
-            return (x + y);
-        }
-        else if(pop() == '-')
-        {
-           int x = pop();
-            int y = pop();
-            return (x - y);
-        }
-        else if(pop() == '*')
-        {
-          int x = pop();
-            int y = pop();
-            return (x * y);
-        }
-        else if(pop() == '/')
-        {
-            int x = pop();
-            int y = pop();
-            return (x / y);
-        }
-        else if(pop() == '%')
-        {
-            int x = pop();
-            int y = pop();
-            return (x % y);
-        }
-        else
-        {
-           printf("Error: Not a valid operator");
-        }
+    if (peek() == '+')
+    {   
+        pop();
+        int x = pop();
+        int y = pop();
+        return (x + y);
+    }
+    else if (peek() == '-')
+    {
+        pop();
+        int x = pop();
+        int y = pop();
+        return (x - y);
+    }
+    else if (peek() == '*')
+    {
+        pop();
+        int x = pop();
+        int y = pop();
+        return (x * y);
+    }
+    else if (peek() == '/')
+    {
+        pop();
+        int x = pop();
+        int y = pop();
+        return (x / y);
+    }
+    else if (peek() == '%')
+    {
+        pop();
+        int x = pop();
+        int y = pop();
+        return (x % y);
+    }
+    else
+    {
+        printf("Error: Not a valid operator");
+    }
 }
 
 int main(int argc, char *argv[])
@@ -97,51 +111,61 @@ int main(int argc, char *argv[])
     /* walk through other tokens */
     while (token != NULL)
     {
-        if( strstr(token, "+") != NULL)
+        if (strstr(token, "+") != NULL)
         {
             // old debug code printf("Operate found: %s",token);
-            push(43); // ascii for +
+            push('+'); // ascii for +
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
-        else if ( strstr(token, "-") != NULL)
+        else if (strstr(token, "-") != NULL)
         {
             // old debug code printf("Operate found: %s",token);
-            push(45); // ascii for -
+            push('-'); // ascii for -
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
-        else if ( strstr(token, "*") != NULL)
+        else if (strstr(token, "*") != NULL)
         {
             // old debug code printf("Operate found: %s",token);
-            push(42); // ascii for *
+            push('*'); // ascii for *
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
-        else if ( strstr(token, "/") != NULL)
+        else if (strstr(token, "/") != NULL)
         {
             // old debug code printf("Operate found: %s",token);
-            push(47); // ascii for /
+            push('/'); // ascii for /
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
-        else if ( strstr(token, "%") != NULL)
+        else if (strstr(token, "%") != NULL)
         {
             // old debug code printf("Operate found: %s",token);
-            push(37); // ascii for %
+            push('%'); // ascii for %
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
         else
         {
             push(atoi(token));
+            // old debug code printf(" %s\n", token);
+            token = strtok(NULL, " ");
         }
-        
-        // old debug code printf(" %s\n", token);
-        token = strtok(NULL, " ");
     }
     /* ----- END: do the calculations ----- */
-    // old debug code display();
+    display();
     int result = calc();
-    char result_arr [64];
+    char result_arr[64];
     // old debug code printf("Result: %d \n",result);
-    sprintf(result_arr, "%d",result);
+    sprintf(result_arr, "%d", result);
     // message to sent back to client
-    n = write(newsockfd,"Server: ",8);
-    n = write(newsockfd,result_arr,64);
+    n = write(newsockfd, "Server: ", 8);
+    n = write(newsockfd, result_arr, 64);
 
     if (n < 0)
         error("ERROR writing to socket");
+
     close(newsockfd);
     close(sockfd);
     return 0;

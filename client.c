@@ -1,3 +1,13 @@
+/* client.c
+** client implementation file
+** Name: Carlos Santos
+** 12/4/19
+** Instructor: Bruce Bolden
+** CS 270
+** Note: code used from http://www.linuxhowtos.org/C_C++/socket.htm with a few modifications.
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
