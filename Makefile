@@ -15,12 +15,12 @@ server:
 # make just the client
 client:
 	gcc client.c -o c
-# run the sever on port 4500
+# run the sever on port 4501
 # ./filename port
 runs:
-	./s 4500
-# run the client on port 4500 and with a set hostname
+	./s 4501
+# run the client on port 4501 and with a set hostname
 # ./filename hostname port
 runc:
-	./c cs-course36.cs.uidaho.edu 4500
+	./c cs-course36.cs.uidaho.edu 4501
 

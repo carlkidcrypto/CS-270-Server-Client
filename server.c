@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "stack.c"
 
 void error(const char *msg)
 {
@@ -62,25 +63,22 @@ int main(int argc, char *argv[])
 
     /* ----- BEGIN: do the calculations ----- */
     char *token;
-    int i_items = 0;
     /* get the first token */
     token = strtok(buffer, " ");
-
     /* walk through other tokens */
     while (token != NULL)
     {
-        items[i_items] = token;
+        if(token == '+' || token == '-' || token == '*' || token == '/')
+        {
+            printf("Operate found: %s",token);
+            printf(" %d",token);
+        }
+        push(atoi(token));
         printf(" %s\n", token);
         token = strtok(NULL, " ");
     }
-
-    
-
-//int results = atoi(x);
-
-
     /* ----- END: do the calculations ----- */
-
+    display();
     // message to sent back to client
     n = write(newsockfd, "Server: message received", 24);
     if (n < 0)
