@@ -9,14 +9,16 @@ void push(int val)
     newnode->next = top;
     top = newnode;
 }
-void pop()
+int pop()
 {
     if (top == NULL)
         printf("Stack Underflow");
     else
     {
+        int temp = top->data;
         printf("The popped element is: %d \n", (top->data));
         top = top->next;
+        return temp;
     }
 }
 void display()

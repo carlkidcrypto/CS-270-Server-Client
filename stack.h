@@ -7,5 +7,5 @@ struct Node* top = NULL;
 
 
 void display();
-void pop();
+int pop();
 void push(int val);

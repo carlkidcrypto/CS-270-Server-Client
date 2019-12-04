@@ -15,17 +15,46 @@ void error(const char *msg)
     exit(1);
 }
 
-int calc(char items[], int size)
+int calc()
 {
+    if(pop() == '+')
+        {
+            int x = pop();
+            int y = pop();
+            return (x + y);
+        }
+        else if(pop() == '-')
+        {
+           int x = pop();
+            int y = pop();
+            return (x - y);
+        }
+        else if(pop() == '*')
+        {
+          int x = pop();
+            int y = pop();
+            return (x * y);
+        }
+        else if(pop() == '/')
+        {
+            int x = pop();
+            int y = pop();
+            return (x / y);
+        }
+        else if(pop() == '%')
+        {
+            int x = pop();
+            int y = pop();
+            return (x % y);
+        }
+        else
+        {
+           printf("Error: Not a valid operator");
+        }
 }
 
 int main(int argc, char *argv[])
 {
-    /* ----- BEGIN: stuff for postfix calc ----- */
-    char items[64];
-    int result = 0;
-    /* ----- END: stuff for postfix calc ----- */
-
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
@@ -68,19 +97,46 @@ int main(int argc, char *argv[])
     /* walk through other tokens */
     while (token != NULL)
     {
-        if(token == '+' || token == '-' || token == '*' || token == '/')
+        if( strstr(token, "+") != NULL)
         {
             printf("Operate found: %s",token);
-            printf(" %d",token);
+            push(43); // ascii for +
         }
-        push(atoi(token));
+        else if ( strstr(token, "-") != NULL)
+        {
+            printf("Operate found: %s",token);
+            push(45); // ascii for -
+        }
+        else if ( strstr(token, "*") != NULL)
+        {
+            printf("Operate found: %s",token);
+            push(42); // ascii for *
+        }
+        else if ( strstr(token, "/") != NULL)
+        {
+            printf("Operate found: %s",token);
+            push(47); // ascii for /
+        }
+        else if ( strstr(token, "%") != NULL)
+        {
+            printf("Operate found: %s",token);
+            push(37); // ascii for %
+        }
+        else
+        {
+            push(atoi(token));
+        }
+        
         printf(" %s\n", token);
         token = strtok(NULL, " ");
     }
     /* ----- END: do the calculations ----- */
     display();
+    int result = calc();
+    printf("Result: %d \n",result);
     // message to sent back to client
-    n = write(newsockfd, "Server: message received", 24);
+    n = write(newsockfd,"Server: message received", 24);
+    n = write(newsockfd,"Server: Result",14);
     if (n < 0)
         error("ERROR writing to socket");
     close(newsockfd);
